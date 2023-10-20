@@ -46278,10 +46278,12 @@ def create_loan(request):
     cmp1 = company.objects.get(id=request.session["uid"])
     loan=loan_account.objects.filter(cid=cmp1)
     bank=bankings_G.objects.filter(cid=cmp1)
+    accounts = BankAccount.objects.all()
     context={
         'cmp1':cmp1,
         'loan':loan,
         'bank':bank,
+        'accounts':accounts,
     }
     return render(request,'app1/loan_creat.html',context)
     

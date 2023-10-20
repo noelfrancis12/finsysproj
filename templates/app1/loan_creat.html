@@ -7,7 +7,7 @@
        
             <div class="col-md-12">
                <center>
-               <h2> New loan Acoount</h2>
+               <h2> New loan Acount</h2>
             </center>
             </div>
             
@@ -30,7 +30,12 @@
     </div>
     
     <div class="row">
-        <div class="col-md-5  p-2"><input class="form-control bg-grey" type="text" name="acc_name" value=""></div>
+        <div class="col-md-5  p-2"><select     name="acc_name" class="form-control  text-white" id="">
+            <option class="form-control bg-dark text-white" value="cash">Select Name</option>
+            {% for i in accounts %}
+            <option class="form-control bg-dark text-white" value="{{i.holder_name}}">{{i.holder_name}}</option>
+            {% endfor %}
+        </select></div>
         <div class="col-md-2"></div>
         <div class="col-md-5 p-2"> <select     name="lender" class="form-control  text-white" id="">
             <option class="form-control bg-dark text-white" value="cash">CASH</option>
