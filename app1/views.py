@@ -46307,15 +46307,15 @@ def create_loan_account(request):
         balance = loan_amount
         recieved_amount = loan_amount -processing
         # Handle lender, received bank, and processing bank options
-        if lenderbank == 'cash':
-            lender_bankname = 'cash'
-            cid.cash -= loan_amount
-            cid.save()
-        else:
-            lender = bankings_G.objects.get(bankname=lenderbank)
-            lender_bankname = lender.bankname
-            lender.balance -= loan_amount
-            lender.save()
+        # if lenderbank == 'cash':
+        #     lender_bankname = 'cash'
+        #     cid.cash -= loan_amount
+        #     cid.save()
+        # else:
+        #     lender = bankings_G.objects.get(bankname=lenderbank)
+        #     lender_bankname = lender.bankname
+        #     lender.balance -= loan_amount
+        #     lender.save()
         
         if received_bank == 'cash':
             received_bankname = 'cash'
@@ -46342,7 +46342,7 @@ def create_loan_account(request):
         loan = loan_account(
                 account_name=account_name,
                 account_number=account_number,
-                lenderbank=lender_bankname,
+                lenderbank=lenderbank,
                 recieced_bank=received_bankname,
                 intrest=interest,
                 term=term,
@@ -46649,15 +46649,15 @@ def crt_loan_trans(request, id):
             received_bank.save()
             
             # Add the payment amount to the lender bank (if not cash)
-        if loan.lenderbank == 'cash':
-            cid.cash += principal
-            cid.save()
-        else:
-            lender_bank = bankings_G.objects.get(bankname=loan.lenderbank)
-            lender_bank.balance += principal
-            print('done')
-            print(lender_bank)
-            lender_bank.save()
+        # if loan.lenderbank == 'cash':
+        #     cid.cash += principal
+        #     cid.save()
+        # else:
+        #     lender_bank = bankings_G.objects.get(bankname=loan.lenderbank)
+        #     lender_bank.balance += principal
+        #     print('done')
+        #     print(lender_bank)
+        #     lender_bank.save()
                 
         
         # Update the loan account balance
@@ -46681,7 +46681,7 @@ def crt_loan_trans(request, id):
         )
         transaction.save()
 
-    return redirect('loan')
+    return redirect('loan_list',id)
     
     
 def edit_loan_payment(request, id):
@@ -46781,7 +46781,7 @@ def loan_pdf(request,id):
 
     cmp1 = company.objects.get(id=request.session["uid"])
     
-    bnk=bank_transactions.objects.filter(loan_id=id)
+    bnk=bank_transactions.objects.filter(cid_id=id)
 
     loan=loan_account.objects.get(id=id)
     
