@@ -32,13 +32,7 @@
     <div class="row">
         <div class="col-md-5  p-2"><input class="form-control bg-grey" type="text" name="acc_name" value="{{loan.account_name}}"></div>
         <div class="col-md-2"></div>
-        <div class="col-md-5 p-2"> <select    name="lender" class="form-control  text-white" id="">
-            <option class="form-control bg-dark text-white" value="{{loan.lenderbank}}" selected>{{loan.lenderbank}}</option>
-            <option class="form-control bg-dark text-white" value="cash">CASH</option>
-            {% for i in bank %}
-            <option class="form-control bg-dark text-white" value="{{i.bankname}}">{{i.bankname}}</option>
-            {% endfor %}
-        </select> </div>
+        <div class="col-md-5 p-2"> <input class="form-control" type="text" name="lender" value="{{loan.lenderbank}}"> </div>
     </div>
     
     <div class="row">

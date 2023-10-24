@@ -46459,22 +46459,22 @@ def edit_loan_account(request, id):
             received.balance = int(loan.balance) 
             print(received.balance)
             received.save()
-        if loan.lenderbank == 'cash':
-            cid.cash += int(loan.loan_amount)
-            print('lender')
-            print(cid.cash)
-            cid.save()
-        else:
-            lender = bankings_G.objects.get(bankname=loan.lenderbank)
-            lender.balance += int(loan.loan_amount)
-            lender.save()
+        # if loan.lenderbank == 'cash':
+        #     cid.cash += int(loan.loan_amount)
+        #     print('lender')
+        #     print(cid.cash)
+        #     cid.save()
+        # else:
+        #     lender = bankings_G.objects.get(bankname=loan.lenderbank)
+        #     lender.balance += int(loan.loan_amount)
+        #     lender.save()
         # Handle lender, received bank, and processing bank options
         loan.account_name = request.POST.get('acc_name')
         loan.account_number = request.POST.get('acc_number')
         loan.lenderbank = request.POST.get('lender')
         loan.recieced_bank = request.POST.get('received')
         loan.paid = request.POST.get('paid')
-        loan.interest = request.POST.get('interest')
+        loan.intrest = request.POST.get('intrest')
         loan.term = request.POST.get('term')
         loan.loan_amount = int(request.POST.get('balance'))
         loan.processing = int(request.POST.get('processing'))
@@ -46489,15 +46489,15 @@ def edit_loan_account(request, id):
 
 
         # Check if lender is cash
-        if loan.lenderbank == 'cash':
-            cash -= loan.balance   # Subtract the new loan amount
-            cid.cash = cash
+        # if loan.lenderbank == 'cash':
+        #     cash -= loan.balance   # Subtract the new loan amount
+        #     cid.cash = cash
 
-            cid.save()
-        else:
-            lender = bankings_G.objects.get(bankname=loan.lenderbank)
-            lender.balance -= loan.balance 
-            lender.save()
+        #     cid.save()
+        # else:
+        #     lender = bankings_G.objects.get(bankname=loan.lenderbank)
+        #     lender.balance -= loan.balance 
+        #     lender.save()
 
         # Check if received bank is cash
         if loan.recieced_bank == 'cash':
@@ -46569,20 +46569,20 @@ def delet_loan(request, id):
     loan = loan_account.objects.get(id=id)
     print(loan.lenderbank)
     # Check if the lender bank is 'cash'
-    if loan.lenderbank == 'cash':
-        cid.cash += loan.balance
-        cid.save()
-        # Add the loan amount to the lender bank's balance
-        received_bank = bankings_G.objects.get(bankname=loan.recieced_bank)
-        received_bank.balance -= loan.balance
-        received_bank.save()
-    else:
-        cid.cash -= loan.balance
-        cid.save()
-        # Subtract the loan amount from the received bank's balance
-        received_bank = bankings_G.objects.get(bankname=loan.lenderbank)
-        received_bank.balance += loan.balance
-        received_bank.save()
+    # if loan.lenderbank == 'cash':
+    #     cid.cash += loan.balance
+    #     cid.save()
+    #     # Add the loan amount to the lender bank's balance
+    #     received_bank = bankings_G.objects.get(bankname=loan.recieced_bank)
+    #     received_bank.balance -= loan.balance
+    #     received_bank.save()
+    # else:
+    #     cid.cash -= loan.balance
+    #     cid.save()
+    #     # Subtract the loan amount from the received bank's balance
+    #     received_bank = bankings_G.objects.get(bankname=loan.lenderbank)
+    #     received_bank.balance += loan.balance
+    #     received_bank.save()
 
     # Delete the loan
     loan.delete()
@@ -46728,13 +46728,13 @@ def edit_loan_payment(request, id):
             received_from_bank.save()
         
         # Handle balance adjustments for lender bank (if not cash)
-        if loan.to_trans != 'cash':
-            lender_bank = bankings_G.objects.get(bankname=loan.to_trans)
-            lender_bank.balance += principal_difference
-            lender_bank.save()
-        else:
-            cid.cash += principal_difference
-            cid.save()
+        # if loan.to_trans != 'cash':
+        #     lender_bank = bankings_G.objects.get(bankname=loan.to_trans)
+        #     lender_bank.balance += principal_difference
+        #     lender_bank.save()
+        # else:
+        #     cid.cash += principal_difference
+        #     cid.save()
         # Create a transaction record
         
 
@@ -46894,22 +46894,22 @@ def delete_loan_payment(request, id):
     dl_acc.balance += amount
     dl_acc.save()
     # Update company cash and bank balances
-    if dl_loan.from_trans == 'CASH':
-        # Increase company's cash balance
-        cid.cash += amount
-        cid.save()
-        to_trans_bank = bankings_G.objects.get(bankname=to_trans)
-        to_trans_bank.balance -= amount
-        print('doncash')
-        to_trans_bank.save()
-    else:
-        cid.cash -= amount
-        cid.save()
-        # Decrease the 'to_trans' bank's balance
-        to_trans_bank = bankings_G.objects.get(bankname=to_trans)
-        to_trans_bank.balance += amount
-        print('set')
-        to_trans_bank.save()
+    # if dl_loan.from_trans == 'CASH':
+    #     # Increase company's cash balance
+    #     cid.cash += amount
+    #     cid.save()
+    #     to_trans_bank = bankings_G.objects.get(bankname=to_trans)
+    #     to_trans_bank.balance -= amount
+    #     print('doncash')
+    #     to_trans_bank.save()
+    # else:
+    #     cid.cash -= amount
+    #     cid.save()
+    #     # Decrease the 'to_trans' bank's balance
+    #     to_trans_bank = bankings_G.objects.get(bankname=to_trans)
+    #     to_trans_bank.balance += amount
+    #     print('set')
+    #     to_trans_bank.save()
 
     # If 'to_trans' is cash, increase company's cash balance
     dl_loan.balance += amount
