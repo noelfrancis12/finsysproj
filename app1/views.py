@@ -47210,3 +47210,30 @@ def addrecterm(request):
             context = {'rterm': rterm, 'cmp1': cmp1}
         return render(request, 'app1/addrecionvoices1.html', context)
     return redirect('/')
+def save_account_data(request):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            account_name = request.POST['account_name']
+            is_active = request.POST['is_active']
+            account_number = request.POST['account_number']
+            ifsc_code = request.POST['ifsc_code']
+            swift_code = request.POST['swift_code']
+            bank_name = request.POST['bank_name']
+            branch_name = request.POST['branch_name']
+
+            bank_account = BankAccount(
+                holder_name=account_name,
+                is_active=is_active,
+                account_number=account_number,
+                ifsc_code=ifsc_code,
+                swift_code=swift_code,
+                bank_name=bank_name,
+                branch_name=branch_name
+            )
+            bank_account.save()
+        except Exception:
+            return JsonResponse({'success': False, 'error': 'An error occurred while saving the account data.'})
+
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request.'})

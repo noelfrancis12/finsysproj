@@ -235,6 +235,10 @@
         left: 0;
         top: 0;
     }
+    @page {
+        size: A4;
+        margin: 0;
+    }
     
 }
     </style>
@@ -248,8 +252,8 @@
                     <center><h2 class="mb-0">CASH STATEMENT</h2></center>
                     <hr>
                     <div class="right">
-                        <button class="btn btn_pdf btn-outline-info">pdf</button>
-                        <button class="btn btn_print btn-outline-info">Print</button>
+                        <button class="btn toPDF btn-outline-info">pdf</button>
+                        <button class="btn btn_print btn-outline-info" onclick="printSection('whatToPrint')">Print</button>
 
                         <button class=" btn btn-outline-info"  onclick="shareContent()">Share</button>
                     </div>
@@ -334,8 +338,9 @@
                                    
                                {% for a in bnk %}
                                         <tr>
-                                            <td>{{a.cash_date}}</td>
+                                            
                                             {% if a.type != 'OPENING BAL' %}
+                                            <td>{{a.cash_date}}</td>
                                             {% if a.cash_adjust == 'ADD CASH' %}
                                                 <td>  {{a.cash_adjust }}</td>
                                                 {% elif a.cash_adjust == 'REDUCE CASH' %}
@@ -409,7 +414,11 @@
             });
         </script>
 
-      
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.js"></script>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
         <script type="text/javascript">
             $('.delete').click(function(e){
@@ -451,22 +460,44 @@
 
 </script>
 <script>
-  // Add event listener for print button
-document.querySelector('.btn_print').addEventListener('click', function () {
-    window.print(); // This will trigger the browser's print dialog
-});
+ 
 
-// Add event listener for PDF button
-document.querySelector('.btn_pdf').addEventListener('click', function () {
-    const pdfElement = document.getElementById('whatToPrint'); // The element you want to convert to PDF
-    const pdf = new jsPDF(); // Create a new jsPDF instance
+$(document).ready(function () {
+        console.log('print');
 
-    pdf.addHTML(pdfElement, () => {
-        pdf.save('cash_statement.pdf'); // Save the PDF with a specific name
-    });
-});
+        $(document).on('click', '.toPDF', function (event) {
+            console.log('print1');
+            event.preventDefault();
+            var element = document.getElementById('whatToPrint');
+            
+            var opt =
+            {
+                margin: 0,
+                filename: 'cash statement_'+ '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+        });
+
+ });
 
 </script>
+<script>  
+    function printSection(sectionId) {
+    var printContents = document.getElementById(sectionId).innerHTML;
+    var originalContents = document.body.innerHTML;
 
+    document.body.innerHTML = printContents;printSection
+
+    window.print();
+   
+
+    document.body.innerHTML = originalContents;
+    window.location.reload();
+}
+</script>
     {% endif %}
     {% endblock %}
