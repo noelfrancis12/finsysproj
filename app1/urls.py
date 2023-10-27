@@ -1256,6 +1256,6 @@ urlpatterns = [
     path('recrepeatevry',views.recrepeatevry,name='recrepeatevry'),
 
  #Noel
-    path('save_account_data/', views.save_account_data, name='save_account_data'),
+    path('save_account/', views.save_account, name='save_account'),
      
 ]

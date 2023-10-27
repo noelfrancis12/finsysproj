@@ -47210,30 +47210,27 @@ def addrecterm(request):
             context = {'rterm': rterm, 'cmp1': cmp1}
         return render(request, 'app1/addrecionvoices1.html', context)
     return redirect('/')
-def save_account_data(request):
-    if request.method == 'POST' and request.is_ajax():
-        try:
-            account_name = request.POST['account_name']
-            is_active = request.POST['is_active']
-            account_number = request.POST['account_number']
-            ifsc_code = request.POST['ifsc_code']
-            swift_code = request.POST['swift_code']
-            bank_name = request.POST['bank_name']
-            branch_name = request.POST['branch_name']
+def save_account(request):
+  if request.method == "POST":
+    account_name = request.POST.get("account_name")
+    account_number = request.POST.get("account_number")
+    ifsc_code = request.POST.get("ifsc_code")
+    swift_code = request.POST.get("swift_code")
+    bank_name = request.POST.get("bank_name")
+    branch_name = request.POST.get("branch_name")
 
-            bank_account = BankAccount(
-                holder_name=account_name,
-                is_active=is_active,
-                account_number=account_number,
-                ifsc_code=ifsc_code,
-                swift_code=swift_code,
-                bank_name=bank_name,
-                branch_name=branch_name
-            )
-            bank_account.save()
-        except Exception:
-            return JsonResponse({'success': False, 'error': 'An error occurred while saving the account data.'})
+    # Save the data to the database
+    account = BankAccount(
+      holder=request.user,
+      holder_name=account_name,
+      account_number=account_number,
+      ifsc_code=ifsc_code,
+      swift_code=swift_code,
+      bank_name=bank_name,
+      branch_name=branch_name,
+    )
+    account.save()
 
-        return JsonResponse({'success': True})
-
-    return JsonResponse({'success': False, 'error': 'Invalid request.'})
+    return JsonResponse({"status": "success"})
+  else:
+    return JsonResponse({"status": "error"})
